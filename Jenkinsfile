@@ -1,4 +1,4 @@
-// def imageName = 'mlabouardy/movies-parser'
+def imageName = 'mlabouardy/movies-parser'
 // def registry = 'https://registry.slowcoder.com'
 
 node('workers'){
@@ -6,6 +6,12 @@ node('workers'){
         checkout scm
     }
 
+    stage('Quality '){
+        def imageTest=docker.build("${imageName}-test", "-f Dockerfile.test .")
+        imageTest.inside{
+            sh 'golint'
+        }
+    }
     // def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
 
     // stage('Pre-integration Tests'){
